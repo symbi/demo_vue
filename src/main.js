@@ -7,8 +7,8 @@ import store from './store'
 import axios from 'axios'
 //console.log(process.env.VUE_APP_SOMEKEY)
 //axios.defaults.baseURL = 'https://apidjackets.codewithstein.com'
-//axios.defaults.baseURL = 'http://127.0.0.1:8000'
-axios.defaults.baseURL = 'https://fast-harbor-30811.herokuapp.com'
+axios.defaults.baseURL = 'http://127.0.0.1:8000'
+//axios.defaults.baseURL = 'https://fast-harbor-30811.herokuapp.com'
 
 // const axiosInstance = axios.create({
 //     baseURL: 'http://127.0.0.1:8000',
