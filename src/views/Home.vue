@@ -15,7 +15,7 @@
       <div class="column auto">
         
       </div>
-      <div class="column is-7 debug">
+      <div class="column is-7 ">
         <PostBox 
         v-for="post in latestPosts"
         v-bind:key="post.id"

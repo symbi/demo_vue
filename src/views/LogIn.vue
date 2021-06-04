@@ -74,15 +74,23 @@ export default {
                     axios.defaults.headers.common["Authorization"] = "Token " + token
 
                     localStorage.setItem("token", token)
+                    localStorage.setItem("username", this.username)
+                    this.$store.commit('username', this.username)
+                    console.log('localStorage:',localStorage)
 
-                    const toPath = this.$route.query.to || '/cart'
+                    const toPath = this.$route.query.to || '/'
 
                     this.$router.push(toPath)
                 })
                 .catch(error => {
                     if (error.response) {
+                        console.log("error.response.data:",error.response.data);
                         for (const property in error.response.data) {
-                            this.errors.push(`${property}: ${error.response.data[property]}`)
+                             console.log("property:",property,"-----",`${property}`);
+                            if(`${property}`=='non_field_errors')
+                                this.errors.push(`${error.response.data[property]}`)
+                            else
+                                this.errors.push(`${property}: ${error.response.data[property]}`)
                         }
                     } else {
                         this.errors.push('Something went wrong. Please try again')

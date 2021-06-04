@@ -1,6 +1,6 @@
 <template>
-  <div id="wrapper" class="has-background-white-bis">
-    <nav class="navbar is-light">
+  <div id="wrapper" v-bind:class="{'has-background-black-ter':isDark, 'has-background-white-bis':!isDark}">
+    <nav class="navbar" v-bind:class="{'is-dark':isDark, 'is-light':!isDark}">
       <div class="navbar-brand">
         <!--<router-link to="/" class="navbar-item"><strong>Djackets</strong></router-link>
         -->
@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="control">
-                  <button class="button is-success">
+                  <button class="button is-light">
                       <span class="icon">
                       <i class="fas fa-search"></i>
                       </span>
@@ -33,15 +33,17 @@
         </div>
 
         <div class="navbar-end">
-          <div class="navbar-item ">
-            <div class="buttons">
-              <template v-if="$store.state.isAuthenticated">
-                <router-link to="/new-post" class="button is-light">New</router-link>
-              </template>
+          
+            
+          <template v-if="$store.state.isAuthenticated">
+            <div class="navbar-item ">
+              <router-link to="/new-post" >New</router-link>
             </div>
-          </div>
+          </template>
+            
+          
           <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link">
+            <a class="navbar-link is-arrowless">
               PJ
             </a>
 
@@ -61,7 +63,7 @@
             </div>
           </div>
           <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link">
+            <a class="navbar-link is-arrowless">
               Topic
             </a>
 
@@ -75,38 +77,43 @@
               <a class="navbar-item">
                 Topic_3
               </a>
-              <hr class="navbar-divider">
-              <a class="navbar-item">
-                Tags
-              </a>
             </div>
           </div>
 
+          <template v-if="$store.state.isAuthenticated">
+            <div class="navbar-item has-dropdown is-hoverable">
+              <figure class="navbar-link is-arrowless image is-48x48">
+                  <img class="is-rounded" src="https://bulma.io/images/placeholders/64x64.png">
+              </figure>
 
+              <div class="navbar-dropdown">
+                <a class="navbar-item" href="#">
+                    <img src="https://bulma.io/images/bulma-logo.png">
+                </a>
 
-
-          <!--<router-link to="/summer" class="navbar-item">Summer</router-link>
-          <router-link to="/winter" class="navbar-item">Winter</router-link>-->
-
-
-
-
-          <div class="navbar-item">
-            <div class="buttons">
-              <template v-if="$store.state.isAuthenticated">
-                <router-link to="/my-account" class="button is-light">My account</router-link>
-              </template>
-
-              <template v-else>
-                <router-link to="/log-in" class="button is-light">Log in</router-link>
-              </template>
-
-              <!--<router-link to="/cart" class="button is-success">
-                <span class="icon"><i class="fas fa-shopping-cart"></i></span>
-                <span>Cart ({{ cartTotalLength }})</span>
-              </router-link>-->
+                
+                <router-link class="navbar-item" to="/my-account" >My Page</router-link>
+                
+                <a class="navbar-item">
+                  Notice
+                </a>
+                <a class="navbar-item" @click="changeTheme()">
+                  {{theme}}
+                </a>
+                <hr class="navbar-divider">
+                <a class="navbar-item">
+                  <button @click="logout()" class="button is-danger">Log out</button>
+                </a>
+              </div>
             </div>
-          </div>
+          </template>
+
+          <template v-else>
+            <div class="navbar-item">
+              <router-link to="/log-in" class="buttons is-light">Log in</router-link>
+            </div>
+          </template>
+
         </div>
       </div>
     </nav>
@@ -134,12 +141,15 @@ export default {
       showMobileMenu: false,
       cart: {
         items: []
-      }
+      },
+      username:'',
+      theme:'dark',
+      isDark:false
     }
   },
   beforeCreate() {
     this.$store.commit('initializeStore')
-
+    
     const token = this.$store.state.token
 
     if (token) {
@@ -150,6 +160,7 @@ export default {
   },
   mounted() {
     this.cart = this.$store.state.cart
+    this.username=this.$store.state.username
   },
   computed: {
       cartTotalLength() {
@@ -161,6 +172,31 @@ export default {
 
           return totalLength
       }
+  },
+  methods: {
+    changeTheme(){
+      this.theme=this.isDark?'dark':'light'
+      this.isDark=!this.isDark
+      
+      //$( "#wrapper" ).toggleClass( "className", addOrRemove );
+    },
+    logout() {
+        axios.defaults.headers.common["Authorization"] = ""
+
+        localStorage.removeItem("token")
+        localStorage.removeItem("username")
+        localStorage.removeItem("userid")
+
+        this.$store.commit('removeToken')
+
+        this.$router.push('/')
+    },
+    mouseOverAction(){
+        this.hoverFlag = true
+    },
+    mouseLeaveAction(){
+        this.hoverFlag = false
+    }
   }
 }
 </script>

@@ -7,6 +7,7 @@ export default createStore({
     },
     isAuthenticated: false,
     token: '',
+    username:'',
     isLoading: false
   },
   mutations: {
@@ -19,11 +20,16 @@ export default createStore({
 
       if (localStorage.getItem('token')) {
           state.token = localStorage.getItem('token')
+          state.username = localStorage.getItem('username')
           state.isAuthenticated = true
       } else {
           state.token = ''
+          state.username=''
           state.isAuthenticated = false
-      } 
+      }
+
+
+
     },
     addToCart(state, item) {
       const exists = state.cart.items.filter(i => i.product.id === item.product.id)
@@ -45,6 +51,7 @@ export default createStore({
     removeToken(state) {
         state.token = ''
         state.isAuthenticated = false
+
     },
     clearCart(state) {
       state.cart = { items: [] }

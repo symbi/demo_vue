@@ -102,9 +102,10 @@ export default {
             }*/
             if (!this.errors.length) {
                 const formData = {
-                    username: this.email,
+                    email: this.email,
                     password: this.password,
-                    team_id:this.pj_num
+                    team_id:this.pj_num,
+                    username:this.email.split('@')[0]
                     //project: this.pj_num,
                 }
 
@@ -124,6 +125,7 @@ export default {
                         this.$router.push('/log-in')
                     })
                     .catch(error => {
+                        console.log("catch error:",error);
                         if (error.response) {
                             for (const property in error.response.data) {
                                 this.errors.push(`${property}: ${error.response.data[property]}`)
