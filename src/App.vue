@@ -39,48 +39,48 @@
             <div class="navbar-item ">
               <router-link to="/new-post" >New</router-link>
             </div>
-          </template>
+          
             
           
-          <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link is-arrowless">
-              PJ
-            </a>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link is-arrowless">
+                PJ
+              </a>
 
-            <div class="navbar-dropdown">
-              <a class="navbar-item">
-                All
-              </a>
-              <a class="navbar-item">
-                PJ_1
-              </a>
-              <a class="navbar-item">
-                PJ_2
-              </a>
-              <a class="navbar-item">
-                PJ_3
-              </a>
+              <div class="navbar-dropdown">
+                <a class="navbar-item">
+                  All
+                </a>
+                <a class="navbar-item">
+                  PJ_1
+                </a>
+                <a class="navbar-item">
+                  PJ_2
+                </a>
+                <a class="navbar-item">
+                  PJ_3
+                </a>
+              </div>
             </div>
-          </div>
-          <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link is-arrowless">
-              Topic
-            </a>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link is-arrowless">
+                Topic
+              </a>
 
-            <div class="navbar-dropdown">
-              <a class="navbar-item">
-                Topic_1
-              </a>
-              <a class="navbar-item">
-                Topic_2
-              </a>
-              <a class="navbar-item">
-                Topic_3
-              </a>
+              <div class="navbar-dropdown">
+                <a class="navbar-item">
+                  Topic_1
+                </a>
+                <a class="navbar-item">
+                  Topic_2
+                </a>
+                <a class="navbar-item">
+                  Topic_3
+                </a>
+              </div>
             </div>
-          </div>
 
-          <template v-if="$store.state.isAuthenticated">
+          
             <div class="navbar-item has-dropdown is-hoverable">
               <figure class="navbar-link is-arrowless image is-48x48">
                   <img class="is-rounded" src="https://bulma.io/images/placeholders/64x64.png">
@@ -110,7 +110,10 @@
 
           <template v-else>
             <div class="navbar-item">
-              <router-link to="/log-in" class="buttons is-light">Log in</router-link>
+              <router-link to="/" >Home</router-link>
+            </div>
+            <div class="navbar-item">
+              <router-link to="/log-in" >Log in</router-link>
             </div>
           </template>
 
@@ -126,7 +129,7 @@
       <router-view/>
     </section>
 
-    <footer class="footer has-background-white-ter">
+    <footer class="footer" v-bind:class="{'has-background-black-ter':isDark, 'has-background-white-bis':!isDark}">
       <p class="has-text-right mgb-small is-size-6">Copyright (c) 2021</p>
     </footer>
   </div>
@@ -250,4 +253,5 @@ export default {
     margin-left: 150px;
   }
 }
+@import "./assets/css/_color.scss";
 </style>

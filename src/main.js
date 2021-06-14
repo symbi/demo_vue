@@ -9,7 +9,7 @@ import axios from 'axios'
 //axios.defaults.baseURL = 'https://apidjackets.codewithstein.com'
 axios.defaults.baseURL = 'http://127.0.0.1:8000'
 //axios.defaults.baseURL = 'https://fast-harbor-30811.herokuapp.com'
-
+import "./assets/css/global.css"
 // const axiosInstance = axios.create({
 //     baseURL: 'http://127.0.0.1:8000',
 //     headers: { Authorization: `Bearer ${this.$store.state.token}` },

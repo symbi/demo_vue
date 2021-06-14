@@ -2,7 +2,7 @@
     
     <div class="box">
     <article class="media">
-        <figure class="media-left">
+        <figure class="media-left"> 
         <p class="image is-64x64">
             <img src="https://bulma.io/images/placeholders/128x128.png">
         </p>
@@ -10,8 +10,10 @@
         <div class="media-content">
             <div class="content">
                 <p>
-                <strong>{{post.username}}</strong>
-                <br>{{post.content}}<br>
+                <strong>{{post.user}}</strong>
+                <br>
+                <span v-html="post.body"></span>
+                <br>
                 </p>
                 <nav class="level is-mobile">
 
@@ -23,7 +25,7 @@
                             </span><small>{{post.points}}</small>
                         </a>
                         
-                        <a class="level-item" v-bind:class="{'icon_toclick':!is_clicked_comments, 'icon_clicked':is_clicked_comments}" aria-label="comments" @click="click_comments">
+                        <a class="level-item" @click="click_comments" aria-label="comments">
                             <span class="icon is-small">
                             <i v-if="!is_clicked_comments" class="fas fa-comment" aria-hidden="true"></i>
                             <!--<i class="fas fa-chevron-down" aria-hidden="true"></i>-->
@@ -39,14 +41,14 @@
                         </a>
 
                         <div class="level-item" aria-label="comments">
-                            <small>2 hrs</small>
+                            <small>{{post.x_ago}}</small>
                         </div>                            
 
                     </div>
                 </nav>
             </div>
             <div v-if="!toReply">
-                <CommentBox v-if="!is_clicked_comments"
+                <CommentBox v-if="!is_clicked_comments && comments.length>0"
                 v-bind:key="comments[0].id"
                 v-bind:comment="comments[0]"/>
                 
@@ -56,9 +58,12 @@
                 v-bind:comment="comment"/>
             </div>
             <div v-else>
-                <InputBox 
-                v-bind:key="post.id"
-                v-bind:username="post.username"/>
+                <InputBox @posted="onPostedChild"
+                :key="post.id"
+                :poster_id="post.id"
+                :username="post.user"
+                :height="100"
+                :boxtype="'input_comment'"/>
             </div>
         </div>
     </article>
@@ -68,12 +73,15 @@
 <script>
 import CommentBox from '@/components/CommentBox.vue'
 import InputBox from '@/components/InputBox.vue'
-
+import "bulma";
 export default {
     name: 'PostBox',
     props: {
         post: Object,
-        comments:Array,
+        comments:{
+            type:Array,
+            default:[]
+        },
 
     },
     components: {
@@ -85,10 +93,25 @@ export default {
             is_clicked_comments:false,
             upvoted:false,
             toReply:false,
+            isHovering:false,
+            bgcolor: "#db277b"
         }
     },
     methods:{
-
+        onPostedChild (value) {
+            //this.comments.push(value)
+            this.comments.unshift(value);
+            this.is_clicked_comments=true
+            this.toReply=false
+        },
+        is_mouseover(){
+            console.log("mouseover");
+            this.bgcolor="#0887ee"
+        },
+        is_mouseleave(){
+             console.log("mouseleave");
+            this.bgcolor="#012c4e"
+        },
         click_comments(){
             
             if(this.toReply){
@@ -100,6 +123,7 @@ export default {
             
         },
         click_upvote(){
+            console.log("postbox click_upvote before:",this.upvoted);
             this.upvoted=!this.upvoted;
         },
         click_reply(){
@@ -109,42 +133,63 @@ export default {
         }
         
     },
+    computed: {
+        styleObject() {
+        return {
+            '--box-bg-color': this.bgcolor,
+        };
+        },
+    },
 }
 </script>
+<style>
+:root {
+    --blue: #0887ee;
+    --pink: #db277b;
+}
+</style>
 
 <style scoped>
+/* src="../assets/css/_color.css" */
 .icon_toclick {
-    color: #0887ee;
-}
-.icon_clicked {
-    color: #012c4e;
+    color: var(--blue);
 }
 
 .icon_clicked_vote {
-    color: #db277b;
+    color: var(--pink);
 }
-/*
-.ck-editor .ck-editor__main .ck-content {
-    min-height: 500px;
+::v-deep(.icon_clicked_vote) {
+    color: var(--pink);
 }
-.ck-editor__top {
-    width: 500px;
+::v-deep(.icon_toclick) {
+    color:  var(--blue);
 }
-*/
-.ck-toolbar.ck-toolbar_floating>.ck-toolbar__items { flex-wrap: wrap; } 
 
-.ck-editor__editable {
-    min-height: 100px !important;
+
+
+/* .hoverbox{
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 5);
 }
-/*
-@media screen and (min-width: 1000px){
-.is-width-960px {
-    max-width: 960px!important;
+
+custombox{
+    background-color:#4b0f5e;
 }
-}
- .image {
-    margin-top: -1.25rem;
-    margin-left: -1.25rem;
-    margin-right: -1.25rem;
-  } */
+custombox:hover {
+    background-color:#0f5e5a;
+    box-shadow: 0 0.5em 1em -0.125em rgba(#4b0f5e, 0.1), 0 0px 0 1px rgba(#4b0f5e, 2);
+} */
+</style>
+<style lang="scss">
+
+    // $link:#0887ee;
+    // $link-invert: #012c4e;
+    // $link-focus-border: #4b0f5e;
+  /*$blue: #0887ee;
+  
+  $scheme-invert:#4b0f5e;
+  $box-background-color:var(--box-bg-color);
+  $box-link-hover-shadow: 0 0.5em 1em -0.125em rgba(0, 255, 0, 0.1), 0 0 0 1px $blue;
+  $box-shadow: 0 0.5em 1em -0.125em rgba($scheme-invert, 1), 0 0px 0 1px rgba($scheme-invert, 0.02);
+  */
+  //@import '~bulma';
 </style>

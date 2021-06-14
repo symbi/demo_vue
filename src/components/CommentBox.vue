@@ -10,13 +10,16 @@
                 <div class="content">
                     <p>
                     <strong>{{comment.username}}</strong>
-                    <br>{{comment.content}}<br>
+                    <br>
+                    <span v-html="comment.body"></span>
+                    <br>
                     </p>
                 </div>
                 <nav class="level is-mobile">
 
                     <div class="level-left">
-                        <a class="level-item" aria-label="like">
+                        <a class="level-item" aria-label="like" 
+                        v-bind:class="{'icon_toclick':!upvoted, 'icon_clicked_vote':upvoted}" @click="click_upvote">
                             <span class="icon is-small">
                             <i class="fas fa-thumbs-up" aria-hidden="true"></i>
                             </span><small>{{comment.points}}</small>
@@ -29,7 +32,7 @@
                         </a>-->
 
                         <a class="level-item" aria-label="comments">
-                            <small>2 hrs</small>
+                            <small>{{comment.x_ago}}</small>
                         </a>                            
 
                     </div>
@@ -50,11 +53,18 @@ export default {
     props: {
         comment: Object,
         show: false,
-        replys:[],
+        replys:[],//later maybe
+        
     },
     data() {
         return {
+            upvoted:false,
         }
     },
+    methods:{
+        click_upvote(){
+            this.upvoted=!this.upvoted;
+        },
+    }
 }
 </script>

@@ -3,7 +3,7 @@
         <div class="columns is-multiline is-centered">
             <div class="column is-7">
                 
-                <InputBox v-bind:height="500"/>
+                <InputBox :height="400" :boxtype="input_post"/>
                 
             </div>
         </div>

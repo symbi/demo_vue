@@ -3,7 +3,7 @@
     <form v-on:submit.prevent>
         <div class="row">
             <div class="mb-3">
-                <ckeditor :editor="editor" @ready="onReady" v-model="editorData" :config="editorConfig"></ckeditor>
+                <ckeditor :editor="editor" :style="styleObject" @ready="onReady" v-model="editorData" :config="editorConfig"></ckeditor>
                 
             </div>
             <button class="button is-dark" @click="submitForm">test</button>
@@ -24,6 +24,9 @@ export default {
     props: {
         username: String,
         height:String,
+        boxtype:String,
+        key:String,
+        poster_id:String,
         //post: Object,
         //comments:Array,
 
@@ -41,7 +44,48 @@ export default {
                     uploadUrl: 'http://localhost:8000/api/v1/test/'
                 },
                 toolbar: {
-                    items: [
+                    items: this.getItems(),
+                    //viewportTopOffset: 30,
+                    shouldNotGroupWhenFull: true
+                },
+                language: 'cs',
+                image: {
+                    toolbar: [
+                    'imageTextAlternative',
+                    'imageStyle:full',
+                    //'imageStyle:side',
+                    //'linkImage'
+                    ]
+                },
+                table: {
+                    contentToolbar: [
+                    'tableColumn',
+                    'tableRow',
+                    'mergeTableCells'
+                    ]
+                },
+                licenseKey: ''
+            },
+            errors:[],
+
+
+        }
+    },
+    computed: {
+        // commentsLength() {
+        //     return this.cart.items.reduce((acc, curVal) => {
+        //         return acc += curVal.quantity
+        //     }, 0)
+        // },
+        styleObject() {
+        return {
+            '--box-height': this.height+'px',
+        };
+        },
+    },
+    methods:{
+        getItems(){
+            return [
                     'heading',
                     '|',
                     'fontSize',
@@ -75,53 +119,10 @@ export default {
                     'undo',
                     'redo',
                     'CKFinder'
-                    ],
-                    //viewportTopOffset: 30,
-                    shouldNotGroupWhenFull: true
-                },
-                language: 'cs',
-                image: {
-                    toolbar: [
-                    'imageTextAlternative',
-                    'imageStyle:full',
-                    //'imageStyle:side',
-                    //'linkImage'
                     ]
-                },
-                table: {
-                    contentToolbar: [
-                    'tableColumn',
-                    'tableRow',
-                    'mergeTableCells'
-                    ]
-                },
-                licenseKey: ''
-            },
-            errors:[],
-
-
-        }
-    },
-    computed: {
-        // commentsLength() {
-        //     return this.cart.items.reduce((acc, curVal) => {
-        //         return acc += curVal.quantity
-        //     }, 0)
-        // },
-    },
-    methods:{
+        },
         checkNull(flag,value){
-            console.log("CheckNull:",flag,value);
             switch(flag){
-                case 'height':
-                    if(value==null || value==undefined){
-                        return '100px';
-                    }else{
-                        console.log(this.height+'px');
-                        return this.height+'px';
-                    }
-                    
-
                 case 'username':
                     if(value==null || value==undefined)return '.....';
                     return '@'+this.username;
@@ -168,24 +169,23 @@ export default {
             const data = {
                 //'first_name': 'test',
                 'body':this.editorData,
+                'poster_id':this.poster_id,
             }
-            let hd = {
-                'Content-Type':'application/json',
-                'Authorization':'Bearer'+this.$store.state.token
-            }
+            const url_post=this.boxtype=='input_comment'?'/api/v1/new_comment/':'/api/v1/new/';
 
-
-                // axios.post("http://api.rumaholi.local/api/post", [], {headers: { 'Authorization' : 'Bearer '+ token}}).then(response => {
-                //         this.comments = response.data;
-                //         console.log(response.data)
-                //     })
-            //`Bearer ${this.$store.state.token}`, {headers:hd} 
             await axios
-                .post('/api/v1/new/', data)
+                .post(url_post, data)
                 .then(response => {
-                    console.log("post res:",response);
+                    console.log("post res:",response,this.poster_id in window);
                     //this.$store.commit('clearCart')
-                    this.$router.push('/')
+                    
+                    if(this.poster_id in window){
+                        this.$router.push('/')
+                    }else{
+                        console.log("going to emit data:",response.data);
+                        this.$emit('posted', response.data)
+                    }
+                        
                 })
                 .catch(error => {
                     this.errors.push('Something went wrong. Please try again')
@@ -196,6 +196,7 @@ export default {
                 this.$store.commit('setIsLoading', false)
         }
     },
+
 }
 </script>
 
@@ -203,7 +204,8 @@ export default {
 .ck-toolbar.ck-toolbar_floating>.ck-toolbar__items { flex-wrap: wrap; } 
 
 .ck-editor__editable {
-    min-height: 300px !important;
+    min-height: var(--box-height) !important;
+    
 }
 /*
 @media screen and (min-width: 1000px){

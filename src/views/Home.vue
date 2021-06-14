@@ -20,7 +20,8 @@
         v-for="post in latestPosts"
         v-bind:key="post.id"
         v-bind:post="post"
-        v-bind:comments="post.comments" /> 
+        v-bind:comments="post.comments" 
+        /> 
       </div>
       <div class="column auto"></div>
       <!--<div class="column is-12">
@@ -194,12 +195,12 @@ export default {
       //latestProducts: [],
       latestPosts:[{
         id:'1',
-        username:'Barbara Middleton',
-        content:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non. Suspendisse pellentesque mauris sit amet dolor blandit rutrum. Nunc in tempus turpis.',
+        user:'Barbara Middleton',
+        body:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non. Suspendisse pellentesque mauris sit amet dolor blandit rutrum. Nunc in tempus turpis.',
         comments:[{
           id:'c1',
           username:'Sean Brown',
-          content:'Donec sollicitudin urna eget eros malesuada sagittis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam blandit nisl a nulla sagittis, a lobortis leo feugiat.',
+          body:'Donec sollicitudin urna eget eros malesuada sagittis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam blandit nisl a nulla sagittis, a lobortis leo feugiat.',
           points:7
         },{
           id:'c2',
@@ -211,8 +212,8 @@ export default {
       },
       {
         id:'2',
-        username:'Barbara Middleton',
-        content:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non. Suspendisse pellentesque mauris sit amet dolor blandit rutrum. Nunc in tempus turpis.',
+        user:'Barbara Middleton',
+        body:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non. Suspendisse pellentesque mauris sit amet dolor blandit rutrum. Nunc in tempus turpis.',
         comments:[{
           id:'c1',
           username:'Sean Brown',
@@ -233,7 +234,7 @@ export default {
     PostBox
   },
   mounted() {
-    //this.getLatestProducts()
+    this.getLatestProducts()
 
     document.title = 'Home | Djackets'
   },
@@ -242,9 +243,11 @@ export default {
       this.$store.commit('setIsLoading', true)
 
       await axios
-        .get('/api/v1/latest-products/')
+        //.get('/api/v1/latest-products/')
+        .get('/api/v1/posters/')
         .then(response => {
-          this.latestProducts = response.data
+          this.latestPosts = response.data
+          console.log("latestPosts:",this.latestPosts);
         })
         .catch(error => {
           console.log(error)
