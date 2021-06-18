@@ -236,7 +236,7 @@ export default {
   mounted() {
     this.getLatestProducts()
 
-    document.title = 'Home | Djackets'
+    document.title = 'Home'
   },
   methods: {
     async getLatestProducts() {
@@ -247,7 +247,7 @@ export default {
         .get('/api/v1/posters/')
         .then(response => {
           this.latestPosts = response.data
-          console.log("latestPosts:",this.latestPosts);
+          //console.log("latestPosts:",this.latestPosts);
         })
         .catch(error => {
           console.log(error)

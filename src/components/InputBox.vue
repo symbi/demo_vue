@@ -85,7 +85,7 @@ export default {
     },
     methods:{
         getItems(){
-            return [
+            let ret=[
                     'heading',
                     '|',
                     'fontSize',
@@ -120,6 +120,29 @@ export default {
                     'redo',
                     'CKFinder'
                     ]
+            if(this.boxtype=='input_comment'){
+                ret=[
+                    'alignment',
+                    '|',
+                    'numberedList',
+                    'bulletedList',
+                    '|',
+                    'indent',
+                    'outdent',
+                    '|',
+                    //'todoList',
+                    'link',
+                    'blockQuote',
+                    'imageUpload',
+                    'insertTable',
+                    'mediaEmbed',
+                    '|',
+                    'undo',
+                    'redo',
+                    'CKFinder'
+                    ]
+            }
+            return ret
         },
         checkNull(flag,value){
             switch(flag){

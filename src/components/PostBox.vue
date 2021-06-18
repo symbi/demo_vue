@@ -73,6 +73,7 @@
 <script>
 import CommentBox from '@/components/CommentBox.vue'
 import InputBox from '@/components/InputBox.vue'
+import axios from 'axios'
 import "bulma";
 export default {
     name: 'PostBox',
@@ -91,7 +92,7 @@ export default {
     data() {
         return {
             is_clicked_comments:false,
-            upvoted:false,
+            upvoted:this.post.upvoted,
             toReply:false,
             isHovering:false,
             bgcolor: "#db277b"
@@ -122,9 +123,34 @@ export default {
             }
             
         },
-        click_upvote(){
-            console.log("postbox click_upvote before:",this.upvoted);
-            this.upvoted=!this.upvoted;
+        async click_upvote(){
+            console.log("postbox click_upvote---");
+            
+            this.$store.commit('setIsLoading', true)
+            const data={}
+            data.action=this.upvoted?'cancle':'upvote'
+            data.vote_type='poster'
+            await axios
+                .post('/api/v1/vote/'+this.post.id+'/',data)
+                .then(response => {
+                    this.upvoted=!this.upvoted;
+                    console.log("response:",response.data)
+                    this.post.points=response.data.points
+                })
+                .catch(error => {
+                    if (error.response) {
+                        for (const property in error.response.data) {
+                            this.errors.push(`${property}: ${error.response.data[property]}`)
+                        }
+
+                        console.log(JSON.stringify(error.response.data))
+                    } else if (error.message) {
+                        this.errors.push('Something went wrong. Please try again')
+                        console.log(JSON.stringify(error))
+                    }
+                })
+
+            this.$store.commit('setIsLoading', false)           
         },
         click_reply(){
             if(this.is_clicked_comments)

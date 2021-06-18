@@ -9,7 +9,7 @@
             <div class="media-content">
                 <div class="content">
                     <p>
-                    <strong>{{comment.username}}</strong>
+                    <strong>{{comment.user}}</strong>
                     <br>
                     <span v-html="comment.body"></span>
                     <br>
@@ -48,6 +48,7 @@
 </template>
 <script>
 //import CommentBox from '@/components/CommentBox.vue'
+import axios from 'axios'
 export default {
     name: 'CommentBox',
     props: {
@@ -58,12 +59,42 @@ export default {
     },
     data() {
         return {
-            upvoted:false,
+            upvoted:this.comment.upvoted,
         }
     },
+    created(){
+        //this.upvoted=this.comment.upvoted
+        
+    },
     methods:{
-        click_upvote(){
-            this.upvoted=!this.upvoted;
+        async click_upvote(){
+            console.log("postbox click_upvote---");
+            
+            this.$store.commit('setIsLoading', true)
+            const data={}
+            data.action=this.upvoted?'cancle':'upvote'
+            data.vote_type='comment'
+            await axios
+                .post('/api/v1/vote/'+this.comment.id+'/',data)
+                .then(response => {
+                    this.upvoted=!this.upvoted;
+                    console.log("response:",response.data)
+                    this.comment.points=response.data.points
+                })
+                .catch(error => {
+                    if (error.response) {
+                        for (const property in error.response.data) {
+                            this.errors.push(`${property}: ${error.response.data[property]}`)
+                        }
+
+                        console.log(JSON.stringify(error.response.data))
+                    } else if (error.message) {
+                        this.errors.push('Something went wrong. Please try again')
+                        console.log(JSON.stringify(error))
+                    }
+                })
+
+            this.$store.commit('setIsLoading', false)           
         },
     }
 }
