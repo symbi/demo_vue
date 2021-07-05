@@ -37,7 +37,7 @@
             
           <template v-if="$store.state.isAuthenticated">
             <div class="navbar-item ">
-              <router-link to="/new-post" >New</router-link>
+              <router-link to="/new" >New</router-link>
             </div>
           
             
@@ -205,7 +205,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../node_modules/bulma';
+//@import '../node_modules/bulma';
 
 .lds-dual-ring {
   display: inline-block;
@@ -253,5 +253,5 @@ export default {
     margin-left: 150px;
   }
 }
-@import "./assets/css/_color.scss";
+//@import "./assets/css/_color.scss";
 </style>

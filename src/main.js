@@ -5,6 +5,10 @@ import router from './router'
 import store from './store'
 //Vue.config.productionTip = false
 import axios from 'axios'
+
+
+//import ckeditor from '@ckeditor/ckeditor5-vue';
+
 //console.log(process.env.VUE_APP_SOMEKEY)
 //axios.defaults.baseURL = 'https://apidjackets.codewithstein.com'
 axios.defaults.baseURL = 'http://127.0.0.1:8000'

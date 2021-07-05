@@ -1,6 +1,10 @@
 <template>
     
     <div class="box">
+    <!-- <div v-bind:width="width" v-bind:height="height">
+    <img v-bind:src="fileName" />
+    </div>   -->
+
     <article class="media">
         <figure class="media-left"> 
         <p class="image is-64x64">
@@ -8,7 +12,7 @@
         </p>
         </figure>
         <div class="media-content">
-            <div class="content">
+            <div class="content" >
                 <p>
                 <strong>{{post.user}}</strong>
                 <br>
@@ -89,16 +93,31 @@ export default {
         CommentBox,
         InputBox,
     },
+    mounted() {
+        window.addEventListener('resize', this.handleResize);
+        this.handleResize();
+    },
     data() {
         return {
             is_clicked_comments:false,
             upvoted:this.post.upvoted,
             toReply:false,
             isHovering:false,
-            bgcolor: "#db277b"
+            bgcolor: "#db277b",
+            height: 50,
+            width: 50,
+            margin: 50,
+            //fileName: "https://homepages.cae.wisc.edu/~ece533/images/airplane.png"
         }
     },
     methods:{
+        handleResize: function () {
+            // Calculate new canvas size based on window
+            this.height = window.innerHeight - this.margin;
+            this.width = window.innerWidth - this.margin;
+            //console.log("window.innerHeight:",window.innerHeight);
+            //console.log("window.innerWidth:",window.innerWidth);
+        },
         onPostedChild (value) {
             //this.comments.push(value)
             this.comments.unshift(value);
@@ -166,6 +185,9 @@ export default {
         };
         },
     },
+    beforeDestroy() {
+        window.removeEventListener('resize', this.handleResize);
+    }
 }
 </script>
 <style>
@@ -190,7 +212,18 @@ export default {
 ::v-deep(.icon_toclick) {
     color:  var(--blue);
 }
+::v-deep(.ck-editor__editable){
+    /* --box-height: 800px; */
+    /* min-height: var(--height); */
+    min-height: 100px;
+}
 
+/* ::v-deep(div.cl p) {
+ height: var(--p-height);
+ background-color: rgb(23, 21, 161);
+ border: 1px solid black;
+ margin: 2px;
+} */
 
 
 /* .hoverbox{

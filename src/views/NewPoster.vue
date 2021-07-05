@@ -3,8 +3,8 @@
         <div class="columns is-multiline is-centered">
             <div class="column is-7">
                 
-                <InputBox :height="400" :boxtype="input_post"/>
-                
+                <!--<InputBox2 :height="400" :boxtype="input_post"/>-->
+                <InputBox :height="500" :boxtype="input_post"/>
             </div>
         </div>
     </div>

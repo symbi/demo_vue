@@ -1,5 +1,5 @@
 <template>
-    <div class="column is-12">
+    <div>
         <article class="media">
             <figure class="media-left">
             <p class="image is-48x48">

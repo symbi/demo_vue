@@ -15,7 +15,7 @@
       <div class="column auto">
         
       </div>
-      <div class="column is-7 ">
+      <div class="column is-7">
         <PostBox 
         v-for="post in latestPosts"
         v-bind:key="post.id"
@@ -261,5 +261,17 @@ export default {
 <style scoped>
 .debug {
     background: lavender;
+}
+/* @media screen and (min-width: 1088px) {
+  .is-fixed {
+    margin-left: auto;
+    margin-right: 150px;
+  }
+} */
+.columns:not(.is-desktop) {
+  @media screen and (min-width: 768px) {
+    display: -webkit-box;
+  }
+  display: -ms-flexbox;
 }
 </style>
